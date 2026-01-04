@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Margins - Book Library Search</title>
+    <link href="https://fonts.cdnfonts.com/css/pp-neue-montreal" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #6bb6d6;
+            --color-primary-hover: #5aa5c8;
+            --color-primary-active: #4894ba;
+            --color-bg-primary: #faf9f7;
+            --color-bg-secondary: #ffffff;
+            --color-text-primary: #1a1a1a;
+            --color-text-secondary: #666666;
+            --color-border: #e0dcd9;
+            --color-success: #20a85f;
+            --color-warning: #ff9800;
+            --color-error: #d32f2f;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+            --radius-base: 8px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'PP Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #7bc5db 100%);
+            color: white;
+            padding: var(--space-32);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header h1 {
+            margin: 0 0 var(--space-8) 0;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-32);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--space-32);
+            margin-bottom: var(--space-32);
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            padding: var(--space-24);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card h2 {
+            margin: 0 0 var(--space-20) 0;
+            font-size: 1.3em;
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: var(--space-12);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-20);
+        }
+
+        label {
+            display: block;
+            margin-bottom: var(--space-8);
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: var(--space-12);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            font-size: 1em;
+            font-family: inherit;
+            background: var(--color-bg-secondary);
+            color: var(--color-text-primary);
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(32, 128, 133, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: var(--space-12);
+            margin-bottom: var(--space-20);
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: var(--space-12) var(--space-20);
+            border: none;
+            border-radius: var(--radius-base);
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(32, 128, 133, 0.05);
+        }
+
+        .btn-small {
+            padding: var(--space-8) var(--space-16);
+            font-size: 0.9em;
+            min-width: auto;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-16);
+            margin-bottom: var(--space-20);
+            padding: var(--space-16);
+            background: rgba(32, 128, 133, 0.03);
+            border-radius: var(--radius-base);
+        }
+
+        @media (max-width: 600px) {
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .filter-label {
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-bottom: var(--space-8);
+            display: block;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-8);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+        }
+
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--color-primary);
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .results-container {
+            margin-top: var(--space-32);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-20);
+            padding-bottom: var(--space-16);
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .results-header h2 {
+            margin: 0;
+            color: var(--color-primary);
+        }
+
+        .results-count {
+            background: var(--color-primary);
+            color: white;
+            padding: var(--space-8) var(--space-16);
+            border-radius: 20px;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .book-list {
+            display: grid;
+            gap: var(--space-16);
+        }
+
+        .book-item {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            padding: var(--space-20);
+            transition: all 0.2s;
+        }
+
+        .book-item:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-primary);
+        }
+
+        .book-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: var(--space-12);
+            gap: var(--space-16);
+        }
+
+        .book-title {
+            margin: 0;
+            font-size: 1.2em;
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .book-author {
+            color: var(--color-text-secondary);
+            margin: 0;
+            font-size: 0.95em;
+        }
+
+        .book-status {
+            padding: var(--space-8) var(--space-16);
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .status-available {
+            background: rgba(32, 168, 95, 0.15);
+            color: var(--color-success);
+        }
+
+        .status-limited {
+            background: rgba(255, 152, 0, 0.15);
+            color: var(--color-warning);
+        }
+
+        .status-unavailable {
+            background: rgba(211, 47, 47, 0.15);
+            color: var(--color-error);
+        }
+
+        .book-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-16);
+            margin-top: var(--space-16);
+            padding-top: var(--space-16);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .detail-item {
+            font-size: 0.9em;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            display: block;
+            margin-bottom: var(--space-4);
+        }
+
+        .detail-value {
+            color: var(--color-text-primary);
+        }
+
+        .locations-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-8);
+        }
+
+        .location-item {
+            padding: var(--space-12);
+            background: var(--color-bg-primary);
+            border-left: 3px solid var(--color-primary);
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .location-name {
+            font-weight: 500;
+            margin-bottom: var(--space-4);
+        }
+
+        .location-copies {
+            color: var(--color-text-secondary);
+            font-size: 0.85em;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--space-32);
+            color: var(--color-text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3em;
+            margin-bottom: var(--space-16);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--color-border);
+            margin-bottom: var(--space-20);
+        }
+
+        .tab-button {
+            padding: var(--space-12) var(--space-20);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .tab-button.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .tab-button:hover {
+            color: var(--color-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: var(--space-32);
+            color: var(--color-text-secondary);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--color-border);
+            border-top-color: var(--color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(211, 47, 47, 0.1);
+            color: var(--color-error);
+            padding: var(--space-16);
+            border-radius: var(--radius-base);
+            margin-bottom: var(--space-20);
+            border-left: 4px solid var(--color-error);
+        }
+
+        .success-message {
+            background: rgba(32, 168, 95, 0.1);
+            color: var(--color-success);
+            padding: var(--space-16);
+            border-radius: var(--radius-base);
+            margin-bottom: var(--space-20);
+            border-left: 4px solid var(--color-success);
+        }
+
+        .info-box {
+            background: rgba(32, 128, 133, 0.05);
+            padding: var(--space-16);
+            border-radius: var(--radius-base);
+            margin-bottom: var(--space-20);
+            font-size: 0.95em;
+            color: var(--color-text-primary);
+        }
+
+        .info-box strong {
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 Our Margins</h1>
+        <p>Find your reading list at Singapore libraries</p>
+    </div>
+
+    <div class="container">
+        <div class="main-grid">
+            <!-- Left Panel: Input Options -->
+            <div class="card">
+                <h2>Add Books</h2>
+
+                <div class="tabs">
+                    <button class="tab-button active" onclick="switchTab('csv')">CSV Upload</button>
+                    <button class="tab-button" onclick="switchTab('manual')">Manual Entry</button>
+                </div>
+
+                <!-- CSV Upload Tab -->
+                <div id="csv" class="tab-content active">
+                    <div class="form-group">
+                        <label for="csvFile">Upload Goodreads CSV</label>
+                        <input type="file" id="csvFile" accept=".csv" onchange="handleCSVUpload(event)">
+                        <div class="info-box" style="margin-top: var(--space-12);">
+                            Export your to-read list from Goodreads: My Books → Import and Export → Export Library
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manual Entry Tab -->
+                <div id="manual" class="tab-content">
+                    <div class="form-group">
+                        <label for="bookTitle">Book Title *</label>
+                        <input type="text" id="bookTitle" placeholder="e.g., The Midnight Library">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookAuthor">Author *</label>
+                        <input type="text" id="bookAuthor" placeholder="e.g., Matt Haig">
+                    </div>
+                    <button class="btn-primary" onclick="addManualBook()">Add Book</button>
+                </div>
+
+                <!-- Current Books List -->
+                <div style="margin-top: var(--space-24);">
+                    <h3 style="margin-top: 0; color: var(--color-primary);">Books Added (<span id="bookCount">0</span>)</h3>
+                    <div id="booksList" class="book-list" style="max-height: 300px; overflow-y: auto;">
+                        <div class="empty-state" style="padding: var(--space-20);">
+                            No books added yet
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group" style="margin-top: var(--space-20);">
+                    <button class="btn-primary" onclick="searchAllBooks()">Search Library</button>
+                    <button class="btn-secondary btn-small" onclick="clearAllBooks()">Clear All</button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Filters -->
+            <div class="card">
+                <h2>Filters & Settings</h2>
+
+                <div class="filters">
+                    <div>
+                        <span class="filter-label">Format</span>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="formatPhysical" checked onchange="updateFilters()">
+                                <label for="formatPhysical">Physical Books</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="formatEbook" onchange="updateFilters()">
+                                <label for="formatEbook">eBooks</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="formatAudiobook" onchange="updateFilters()">
+                                <label for="formatAudiobook">Audiobooks</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="filter-label">Availability</span>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="availAvailable" checked onchange="updateFilters()">
+                                <label for="availAvailable">Available Now</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="availLimited" checked onchange="updateFilters()">
+                                <label for="availLimited">Limited Copies</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="availUnavailable" onchange="updateFilters()">
+                                <label for="availUnavailable">Unavailable</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: var(--space-20);">
+                    <label for="locationSelect" class="filter-label">Library Branch</label>
+                    <select id="locationSelect" onchange="updateFilters()">
+                        <option value="">All Locations</option>
+                        <option value="central">Central Library, Victoria St</option>
+                        <option value="bukit">Bukit Merah Public Library</option>
+                        <option value="clementi">Clementi Public Library</option>
+                        <option value="eastern">Eastern Library</option>
+                        <option value="jurong">Jurong Regional Library</option>
+                        <option value="marine">Marine Parade Public Library</option>
+                        <option value="orchard">Orchard Library</option>
+                        <option value="serangoon">Serangoon Library</option>
+                        <option value="tampines">Tampines Regional Library</option>
+                        <option value="woodlands">Woodlands Regional Library</option>
+                    </select>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Tip:</strong> Check multiple filters to narrow down results. The search will show books matching your criteria across Singapore libraries.
+                </div>
+
+                <div class="info-box" style="background: rgba(255, 152, 0, 0.05); border-left-color: var(--color-warning);">
+                    <strong>⚙️ Note:</strong> This prototype uses mock data. Real integration requires NLB API key from data.gov.sg
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-container" id="resultsContainer" style="display: none;">
+            <div class="results-header">
+                <h2>Search Results</h2>
+                <div class="results-count" id="resultsCount">0 books found</div>
+            </div>
+
+            <div id="loadingState" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p style="margin-top: var(--space-16);">Searching library catalogue...</p>
+            </div>
+
+            <div id="errorState" style="display: none;"></div>
+
+            <div id="resultsList" class="book-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let books = [];
+        let searchResults = [];
+        let filters = {
+            formats: ['physical'],
+            availability: ['available', 'limited'],
+            location: ''
+        };
+
+        // Mock library data for demonstration
+        const mockLibraryData = {
+            'The Midnight Library': {
+                author: 'Matt Haig',
+                isbn: '9780857525857',
+                results: [
+                    { branch: 'central', location: 'Central Library, Victoria St', copies: 5, available: 4, format: 'physical' },
+                    { branch: 'clementi', location: 'Clementi Public Library', copies: 3, available: 2, format: 'physical' },
+                    { branch: 'tampines', location: 'Tampines Regional Library', copies: 1, available: 0, format: 'physical' },
+                    { format: 'ebook', available: 1, branch: 'digital' }
+                ]
+            },
+            'Educated': {
+                author: 'Tara Westover',
+                isbn: '9780399590504',
+                results: [
+                    { branch: 'jurong', location: 'Jurong Regional Library', copies: 4, available: 3, format: 'physical' },
+                    { branch: 'marine', location: 'Marine Parade Public Library', copies: 2, available: 1, format: 'physical' },
+                    { format: 'audiobook', available: 1, branch: 'digital' }
+                ]
+            },
+            'Project Hail Mary': {
+                author: 'Andy Weir',
+                isbn: '9780593135204',
+                results: [
+                    { branch: 'woodlands', location: 'Woodlands Regional Library', copies: 6, available: 4, format: 'physical' },
+                    { branch: 'orchard', location: 'Orchard Library', copies: 2, available: 0, format: 'physical' },
+                    { format: 'ebook', available: 2, branch: 'digital' }
+                ]
+            },
+            'Atomic Habits': {
+                author: 'James Clear',
+                isbn: '9780735211292',
+                results: [
+                    { branch: 'eastern', location: 'Eastern Library', copies: 7, available: 3, format: 'physical' },
+                    { branch: 'bukit', location: 'Bukit Merah Public Library', copies: 5, available: 2, format: 'physical' },
+                    { format: 'audiobook', available: 1, branch: 'digital' },
+                    { format: 'ebook', available: 1, branch: 'digital' }
+                ]
+            },
+            'Braiding Sweetgrass': {
+                author: 'Robin Wall Kimmerer',
+                isbn: '9781553210726',
+                results: [
+                    { branch: 'serangoon', location: 'Serangoon Library', copies: 2, available: 1, format: 'physical' }
+                ]
+            }
+        };
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function handleCSVUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const csv = e.target.result;
+                const lines = csv.split('\n');
+                const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                
+                const titleIndex = headers.findIndex(h => h.includes('title'));
+                const authorIndex = headers.findIndex(h => h.includes('author') && !h.includes('goodreads'));
+
+                if (titleIndex === -1) {
+                    alert('Could not find Title column in CSV');
+                    return;
+                }
+
+                let imported = 0;
+                for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    
+                    const cells = lines[i].split(',').map(c => c.trim().replace(/"/g, ''));
+                    const title = cells[titleIndex];
+                    const author = authorIndex >= 0 ? cells[authorIndex] : 'Unknown Author';
+
+                    if (title && !books.some(b => b.title === title)) {
+                        books.push({ title, author });
+                        imported++;
+                    }
+                }
+
+                updateBooksList();
+                alert(`Imported ${imported} books from CSV`);
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        function addManualBook() {
+            const title = document.getElementById('bookTitle').value.trim();
+            const author = document.getElementById('bookAuthor').value.trim();
+
+            if (!title || !author) {
+                alert('Please enter both title and author');
+                return;
+            }
+
+            if (books.some(b => b.title === title)) {
+                alert('This book is already in your list');
+                return;
+            }
+
+            books.push({ title, author });
+            document.getElementById('bookTitle').value = '';
+            document.getElementById('bookAuthor').value = '';
+            updateBooksList();
+        }
+
+        function removeBook(index) {
+            books.splice(index, 1);
+            updateBooksList();
+        }
+
+        function updateBooksList() {
+            document.getElementById('bookCount').textContent = books.length;
+            const listHtml = books.map((book, index) => `
+                <div class="location-item">
+                    <div class="location-name">${book.title}</div>
+                    <div class="location-copies">${book.author}</div>
+                    <button class="btn-secondary btn-small" onclick="removeBook(${index})" style="margin-top: var(--space-8);">Remove</button>
+                </div>
+            `).join('');
+            
+            document.getElementById('booksList').innerHTML = listHtml || '<div class="empty-state" style="padding: var(--space-20);">No books added yet</div>';
+        }
+
+        function clearAllBooks() {
+            if (confirm('Clear all books from your list?')) {
+                books = [];
+                updateBooksList();
+                document.getElementById('resultsContainer').style.display = 'none';
+            }
+        }
+
+        function updateFilters() {
+            filters.formats = [];
+            if (document.getElementById('formatPhysical').checked) filters.formats.push('physical');
+            if (document.getElementById('formatEbook').checked) filters.formats.push('ebook');
+            if (document.getElementById('formatAudiobook').checked) filters.formats.push('audiobook');
+
+            filters.availability = [];
+            if (document.getElementById('availAvailable').checked) filters.availability.push('available');
+            if (document.getElementById('availLimited').checked) filters.availability.push('limited');
+            if (document.getElementById('availUnavailable').checked) filters.availability.push('unavailable');
+
+            filters.location = document.getElementById('locationSelect').value;
+
+            if (searchResults.length > 0) {
+                displayResults();
+            }
+        }
+
+        function searchAllBooks() {
+            if (books.length === 0) {
+                alert('Please add at least one book to search');
+                return;
+            }
+
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('resultsList').innerHTML = '';
+
+            // Simulate API call delay
+            setTimeout(() => {
+                searchResults = [];
+
+                books.forEach(book => {
+                    const mockData = mockLibraryData[book.title];
+                    if (mockData) {
+                        mockData.results.forEach(result => {
+                            searchResults.push({
+                                title: book.title,
+                                author: book.author,
+                                ...result
+                            });
+                        });
+                    } else {
+                        searchResults.push({
+                            title: book.title,
+                            author: book.author,
+                            results: [],
+                            notFound: true
+                        });
+                    }
+                });
+
+                document.getElementById('loadingState').style.display = 'none';
+                displayResults();
+            }, 1000);
+        }
+
+        function getAvailabilityStatus(result) {
+            if (result.notFound) return 'unavailable';
+            if (!result.available) return 'unavailable';
+            if (result.available >= result.copies) return 'available';
+            if (result.available > 0) return 'limited';
+            return 'unavailable';
+        }
+
+        function displayResults() {
+            let filtered = searchResults.filter(result => {
+                const status = getAvailabilityStatus(result);
+                const statusMatch = filters.availability.includes(status);
+                const formatMatch = !result.format || filters.formats.includes(result.format);
+                const locationMatch = !filters.location || result.branch === filters.location;
+
+                return statusMatch && formatMatch && locationMatch;
+            });
+
+            // Group by book title
+            const grouped = {};
+            filtered.forEach(result => {
+                if (!grouped[result.title]) {
+                    grouped[result.title] = {
+                        title: result.title,
+                        author: result.author,
+                        locations: []
+                    };
+                }
+                grouped[result.title].locations.push(result);
+            });
+
+            const resultsCount = Object.keys(grouped).length;
+            document.getElementById('resultsCount').textContent = `${resultsCount} book${resultsCount !== 1 ? 's' : ''} found`;
+
+            if (resultsCount === 0) {
+                document.getElementById('resultsList').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <p>No books match your filters.</p>
+                        <p style="font-size: 0.9em;">Try adjusting your filters or adding more books.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const html = Object.values(grouped).map(book => {
+                const locations = book.locations.filter(loc => !loc.notFound);
+                const notFound = book.locations.some(loc => loc.notFound);
+
+                if (!locations.length) {
+                    return `
+                        <div class="book-item">
+                            <div class="book-header">
+                                <div>
+                                    <h3 class="book-title">${book.title}</h3>
+                                    <p class="book-author">by ${book.author}</p>
+                                </div>
+                                <div class="book-status status-unavailable">Not in NLB</div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Status:</span>
+                                <span class="detail-value">This book is not currently in Singapore National Library catalogue</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const statusMap = {
+                    'available': { class: 'status-available', text: '✓ Available' },
+                    'limited': { class: 'status-limited', text: '⚠ Limited' },
+                    'unavailable': { class: 'status-unavailable', text: '✗ Unavailable' }
+                };
+
+                const statuses = new Set(locations.map(loc => getAvailabilityStatus(loc)));
+                let displayStatus = 'unavailable';
+                if (statuses.has('available')) displayStatus = 'available';
+                else if (statuses.has('limited')) displayStatus = 'limited';
+
+                const status = statusMap[displayStatus];
+
+                const locationsHtml = locations.map(loc => {
+                    const icon = loc.available > 0 ? '✓' : '○';
+                    let formatBadge = '';
+                    if (loc.format === 'ebook') formatBadge = '📱 eBook';
+                    else if (loc.format === 'audiobook') formatBadge = '🎧 Audiobook';
+                    else formatBadge = '📕 Physical';
+
+                    return `
+                        <div class="location-item">
+                            <div class="location-name">${icon} ${loc.location}</div>
+                            <div class="location-copies">
+                                ${formatBadge} • ${loc.available || 0} of ${loc.copies || 1} available
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="book-item">
+                        <div class="book-header">
+                            <div>
+                                <h3 class="book-title">${book.title}</h3>
+                                <p class="book-author">by ${book.author}</p>
+                            </div>
+                            <div class="book-status ${status.class}">${status.text}</div>
+                        </div>
+                        <div class="book-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Total locations:</span>
+                                <span class="detail-value">${locations.length}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Total copies available:</span>
+                                <span class="detail-value">${locations.reduce((sum, l) => sum + (l.available || 0), 0)}</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: var(--space-16);">
+                            <span class="detail-label">Available at:</span>
+                            <div class="locations-list">
+                                ${locationsHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('resultsList').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
